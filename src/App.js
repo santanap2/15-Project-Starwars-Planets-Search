@@ -1,10 +1,16 @@
 import React from 'react';
 import './App.css';
+import AppProvider from './context/AppProvider';
+import Table from './components/Table';
 
-// iniciando projeto
 function App() {
   return (
-    <span>Hello, App!</span>
+    <AppProvider>
+      <div>
+        <h2>Starwars Planets Search</h2>
+        <Table />
+      </div>
+    </AppProvider>
   );
 }
 
