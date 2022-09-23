@@ -1,17 +1,26 @@
 import React, { useContext, useEffect } from 'react';
 import appContext from '../context/AppContext';
+import planetsAPI from '../helpers/planetsAPI';
 
 function Table() {
   const {
-    requestingAPI,
-    planets,
-    filterByName,
     filteredPlanets,
+    filterByName,
+    planets,
+    setPlanets,
   } = useContext(appContext);
 
   useEffect(() => {
+    const requestingAPI = async () => {
+      const data = await planetsAPI();
+      const results = data.results.map((item) => {
+        delete item.residents;
+        return item;
+      });
+      setPlanets(results);
+    };
     requestingAPI();
-  });
+  }, [setPlanets]);
 
   return (
     <div>

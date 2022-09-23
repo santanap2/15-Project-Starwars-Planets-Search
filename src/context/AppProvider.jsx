@@ -1,35 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import appContext from './AppContext';
-import planetsAPI from '../helpers/planetsAPI';
+// import planetsAPI from '../helpers/planetsAPI';
 
 function AppProvider({ children }) {
   const [planets, setPlanets] = useState([]);
   const [filterByName, setFilterByName] = useState({ name: '' });
-  // const [filteredPlanets, setFilteredPlanets] = useState([]);
+  const [filteredPlanets, setFilteredPlanets] = useState(planets);
 
-  const requestingAPI = async () => {
-    const data = await planetsAPI();
-    const results = data.results.map((item) => {
-      delete item.residents;
-      return item;
-    });
-    setPlanets(results);
-  };
+  // const filteredPlanets = filterByName.name.length > 0
+  //   ? planets.filter((item) => item.name.toLowerCase().includes(filterByName.name))
+  //   : planets;
 
-  const filteredPlanets = filterByName.name.length > 0
-    ? planets.filter((item) => item.name.toLowerCase().includes(filterByName.name))
-    : [];
-
-  // useEffect(() => {
-  //   const newPlanets = planets
-  //     .filter((item) => item.name.toLowerCase().includes(filterByName.name));
-  //   setFilteredPlanets(newPlanets);
-  // }, [filterByName.name]);
+  useEffect(() => {
+    const newPlanets = planets
+      .filter((item) => item.name.toLowerCase().includes(filterByName.name));
+    setFilteredPlanets(newPlanets);
+  }, [filterByName.name, planets]);
 
   const globalState = {
-    requestingAPI,
     planets,
+    setPlanets,
     filteredPlanets,
     filterByName,
     setFilterByName,
