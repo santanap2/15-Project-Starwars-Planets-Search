@@ -5,6 +5,8 @@ import planetsAPI from '../helpers/planetsAPI';
 
 function AppProvider({ children }) {
   const [planets, setPlanets] = useState([]);
+  const [filterByName, setFilterByName] = useState({ name: '' });
+  // const [filteredPlanets, setFilteredPlanets] = useState([]);
 
   const requestingAPI = async () => {
     const data = await planetsAPI();
@@ -15,9 +17,22 @@ function AppProvider({ children }) {
     setPlanets(results);
   };
 
+  const filteredPlanets = filterByName.name.length > 0
+    ? planets.filter((item) => item.name.toLowerCase().includes(filterByName.name))
+    : [];
+
+  // useEffect(() => {
+  //   const newPlanets = planets
+  //     .filter((item) => item.name.toLowerCase().includes(filterByName.name));
+  //   setFilteredPlanets(newPlanets);
+  // }, [filterByName.name]);
+
   const globalState = {
-    planets,
     requestingAPI,
+    planets,
+    filteredPlanets,
+    filterByName,
+    setFilterByName,
   };
 
   return (
