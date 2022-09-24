@@ -7,10 +7,10 @@ function AppProvider({ children }) {
   const [planets, setPlanets] = useState([]);
   const [filterByName, setFilterByName] = useState({ name: '' });
   const [filteredPlanets, setFilteredPlanets] = useState(planets);
-
-  // const filteredPlanets = filterByName.name.length > 0
-  //   ? planets.filter((item) => item.name.toLowerCase().includes(filterByName.name))
-  //   : planets;
+  const [columnInput, setColumnInput] = useState('population');
+  const [comparisonInput, setComparisonInput] = useState('maior que');
+  const [valueInput, setValueInput] = useState('0');
+  const [filterByNumericValues, setFilterByNumericValues] = useState({});
 
   useEffect(() => {
     const newPlanets = planets
@@ -18,12 +18,44 @@ function AppProvider({ children }) {
     setFilteredPlanets(newPlanets);
   }, [filterByName.name, planets]);
 
+  useEffect(() => {
+    const { column, comparison, value } = filterByNumericValues;
+    const maiorQue = filteredPlanets
+      .filter((item) => Number(item[column]) > Number(value));
+    const menorQue = filteredPlanets
+      .filter((item) => Number(item[column]) < Number(value));
+    const igualA = filteredPlanets
+      .filter((item) => Number(item[column]) === Number(value));
+
+    switch (comparison) {
+    case 'maior que':
+      setFilteredPlanets(maiorQue);
+      break;
+    case 'menor que':
+      setFilteredPlanets(menorQue);
+      break;
+    case 'igual a':
+      setFilteredPlanets(igualA);
+      break;
+
+    default: return filteredPlanets;
+    }
+  }, [filterByNumericValues]);
+
   const globalState = {
     planets,
     setPlanets,
-    filteredPlanets,
     filterByName,
     setFilterByName,
+    filteredPlanets,
+    columnInput,
+    setColumnInput,
+    comparisonInput,
+    setComparisonInput,
+    valueInput,
+    setValueInput,
+    filterByNumericValues,
+    setFilterByNumericValues,
   };
 
   return (

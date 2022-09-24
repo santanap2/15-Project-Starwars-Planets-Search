@@ -5,8 +5,6 @@ import planetsAPI from '../helpers/planetsAPI';
 function Table() {
   const {
     filteredPlanets,
-    filterByName,
-    planets,
     setPlanets,
   } = useContext(appContext);
 
@@ -45,77 +43,40 @@ function Table() {
 
         <tbody>
           {
-            filterByName.name.length > 0 ? (
-              filteredPlanets.map((item) => {
-                const {
-                  name,
-                  rotation_period: rotationPeriod,
-                  orbital_period: orbitalPeriod,
-                  diameter,
-                  climate,
-                  gravity,
-                  terrain,
-                  surface_water: surfaceWater,
-                  population,
-                  films,
-                  created,
-                  edited,
-                  url,
-                } = item;
-                return (
-                  <tr key={ item.name }>
-                    <td>{ name }</td>
-                    <td>{ rotationPeriod }</td>
-                    <td>{ orbitalPeriod }</td>
-                    <td>{ diameter }</td>
-                    <td>{ climate }</td>
-                    <td>{ gravity }</td>
-                    <td>{ terrain }</td>
-                    <td>{ surfaceWater }</td>
-                    <td>{ population }</td>
-                    <td>{ films }</td>
-                    <td>{ created }</td>
-                    <td>{ edited }</td>
-                    <td>{ url }</td>
-                  </tr>
-                );
-              })
-            ) : (
-              planets.map((item, index) => {
-                const {
-                  name,
-                  rotation_period: rotationPeriod,
-                  orbital_period: orbitalPeriod,
-                  diameter,
-                  climate,
-                  gravity,
-                  terrain,
-                  surface_water: surfaceWater,
-                  population,
-                  films,
-                  created,
-                  edited,
-                  url,
-                } = item;
-                return (
-                  <tr key={ index }>
-                    <td>{ name }</td>
-                    <td>{ rotationPeriod }</td>
-                    <td>{ orbitalPeriod }</td>
-                    <td>{ diameter }</td>
-                    <td>{ climate }</td>
-                    <td>{ gravity }</td>
-                    <td>{ terrain }</td>
-                    <td>{ surfaceWater }</td>
-                    <td>{ population }</td>
-                    <td>{ films }</td>
-                    <td>{ created }</td>
-                    <td>{ edited }</td>
-                    <td>{ url }</td>
-                  </tr>
-                );
-              })
-            )
+            filteredPlanets.map((item) => {
+              const {
+                name,
+                rotation_period: rotationPeriod,
+                orbital_period: orbitalPeriod,
+                diameter,
+                climate,
+                gravity,
+                terrain,
+                surface_water: surfaceWater,
+                population,
+                films,
+                created,
+                edited,
+                url,
+              } = item;
+              return (
+                <tr key={ item.name }>
+                  <td>{ name }</td>
+                  <td>{ rotationPeriod }</td>
+                  <td>{ orbitalPeriod }</td>
+                  <td>{ diameter }</td>
+                  <td>{ climate }</td>
+                  <td>{ gravity }</td>
+                  <td>{ terrain }</td>
+                  <td>{ surfaceWater }</td>
+                  <td>{ population }</td>
+                  <td>{ films }</td>
+                  <td>{ created }</td>
+                  <td>{ edited }</td>
+                  <td>{ url }</td>
+                </tr>
+              );
+            })
           }
         </tbody>
       </table>
