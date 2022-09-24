@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import appContext from './AppContext';
-// import planetsAPI from '../helpers/planetsAPI';
 
 function AppProvider({ children }) {
   const [planets, setPlanets] = useState([]);
@@ -10,7 +9,7 @@ function AppProvider({ children }) {
   const [columnInput, setColumnInput] = useState('population');
   const [comparisonInput, setComparisonInput] = useState('maior que');
   const [valueInput, setValueInput] = useState('0');
-  const [filterByNumericValues, setFilterByNumericValues] = useState({});
+  const [filterByNumericValues, setFilterByNumericValues] = useState([]);
 
   useEffect(() => {
     const newPlanets = planets
@@ -19,43 +18,40 @@ function AppProvider({ children }) {
   }, [filterByName.name, planets]);
 
   useEffect(() => {
-    const { column, comparison, value } = filterByNumericValues;
-    const maiorQue = filteredPlanets
-      .filter((item) => Number(item[column]) > Number(value));
-    const menorQue = filteredPlanets
-      .filter((item) => Number(item[column]) < Number(value));
-    const igualA = filteredPlanets
-      .filter((item) => Number(item[column]) === Number(value));
+    if (filterByNumericValues.length > 0) {
+      const {
+        column, comparison, value,
+      } = filterByNumericValues[filterByNumericValues.length - 1];
+      const test = filteredPlanets.filter((item) => {
+        switch (comparison) {
+        case 'maior que':
+          return Number(item[column]) > Number(value);
+        case 'menor que':
+          return Number(item[column]) < Number(value);
+        case 'igual a':
+          return Number(item[column]) === Number(value);
 
-    switch (comparison) {
-    case 'maior que':
-      setFilteredPlanets(maiorQue);
-      break;
-    case 'menor que':
-      setFilteredPlanets(menorQue);
-      break;
-    case 'igual a':
-      setFilteredPlanets(igualA);
-      break;
-
-    default: return filteredPlanets;
+        default: return filteredPlanets;
+        }
+      });
+      setFilteredPlanets(test);
     }
   }, [filterByNumericValues]);
 
   const globalState = {
-    planets,
-    setPlanets,
-    filterByName,
-    setFilterByName,
-    filteredPlanets,
     columnInput,
-    setColumnInput,
     comparisonInput,
-    setComparisonInput,
-    valueInput,
-    setValueInput,
+    filterByName,
     filterByNumericValues,
+    filteredPlanets,
+    planets,
+    valueInput,
+    setColumnInput,
+    setComparisonInput,
+    setFilterByName,
     setFilterByNumericValues,
+    setPlanets,
+    setValueInput,
   };
 
   return (

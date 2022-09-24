@@ -3,7 +3,6 @@ import appContext from '../context/AppContext';
 
 function FilterNumbers() {
   const {
-    filterByNumericValues,
     setFilterByNumericValues,
     columnInput,
     setColumnInput,
@@ -32,12 +31,9 @@ function FilterNumbers() {
   };
 
   const onClickFilterButton = () => {
-    if (filterByNumericValues) {
-      setFilterByNumericValues({});
-      setFilterByNumericValues({
-        column: columnInput, comparison: comparisonInput, value: valueInput,
-      });
-    }
+    setFilterByNumericValues((prevState) => ([...prevState, {
+      column: columnInput, comparison: comparisonInput, value: valueInput,
+    }]));
   };
 
   return (
