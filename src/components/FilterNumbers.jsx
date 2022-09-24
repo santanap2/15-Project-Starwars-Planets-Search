@@ -26,7 +26,7 @@ function FilterNumbers() {
       setValueInput(target.value);
       break;
 
-    default: break;
+    default: return true;
     }
   };
 
