@@ -20,25 +20,23 @@ function AppProvider({ children }) {
 
   useEffect(() => {
     if (filterByNumericValues.length > 0) {
-      const {
-        column, comparison, value,
-      } = filterByNumericValues[filterByNumericValues.length - 1];
-      const test = filteredPlanets.filter((item) => {
-        switch (comparison) {
-        case 'maior que':
-          console.log(item[column]);
-          return Number(item[column]) > Number(value);
-        case 'menor que':
-          return Number(item[column]) < Number(value);
-        case 'igual a':
-          return Number(item[column]) === Number(value);
+      filterByNumericValues.forEach(({ column, comparison, value }) => {
+        const test = filteredPlanets.filter((item) => {
+          switch (comparison) {
+          case 'maior que':
+            return Number(item[column]) > Number(value);
+          case 'menor que':
+            return Number(item[column]) < Number(value);
+          case 'igual a':
+            return Number(item[column]) === Number(value);
 
-        default: return filteredPlanets;
-        }
+          default: return filteredPlanets;
+          }
+        });
+        setFilteredPlanets(test);
       });
-      setFilteredPlanets(test);
     }
-    console.log('atualizou');
+    console.log(filterByNumericValues);
   }, [filterByNumericValues]);
 
   const globalState = {

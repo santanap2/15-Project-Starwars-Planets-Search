@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect } from 'react';
 import appContext from '../context/AppContext';
 
@@ -6,6 +7,7 @@ function FilterNumbers() {
     columnInput,
     comparisonInput,
     filterByNumericValues,
+    filteredPlanets,
     planets,
     valueInput,
     setColumnInput,
@@ -47,6 +49,7 @@ function FilterNumbers() {
     setFilterByNumericValues((prevState) => ([...prevState, {
       column: columnInput, comparison: comparisonInput, value: valueInput,
     }]));
+    setValueInput(0);
   };
 
   const resetAllFilters = () => {
@@ -58,6 +61,30 @@ function FilterNumbers() {
     const newFilters = filterByNumericValues
       .filter((item) => item.column !== filterColumn);
     setFilterByNumericValues(newFilters);
+
+    console.log(newFilters);
+
+    if (newFilters.length === 0) {
+      setFilteredPlanets(planets);
+    }
+
+    if (newFilters.length > 0) {
+      newFilters.forEach(({ column, comparison, value }) => {
+        const test = planets.filter((item) => {
+          switch (comparison) {
+          case 'maior que':
+            return Number(item[column]) > Number(value);
+          case 'menor que':
+            return Number(item[column]) < Number(value);
+          case 'igual a':
+            return Number(item[column]) === Number(value);
+
+          default: return filteredPlanets;
+          }
+        });
+        setFilteredPlanets(test);
+      });
+    }
   };
 
   useEffect(() => {
@@ -139,7 +166,7 @@ function FilterNumbers() {
                 <button
                   type="button"
                   onClick={ () => removeFilter(column) }
-                  data-testid="filter"
+                  data-testid="remove-filter-btn"
                 >
                   X
                 </button>
