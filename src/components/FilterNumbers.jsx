@@ -1,16 +1,29 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import appContext from '../context/AppContext';
 
 function FilterNumbers() {
   const {
-    setFilterByNumericValues,
     columnInput,
-    setColumnInput,
     comparisonInput,
-    setComparisonInput,
+    filterByNumericValues,
+    planets,
     valueInput,
+    setColumnInput,
+    setComparisonInput,
+    setFilterByNumericValues,
+    setFilteredPlanets,
     setValueInput,
   } = useContext(appContext);
+
+  const array = [
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ];
+
+  const [selectInput, setSelectInput] = useState(array);
 
   const handleInput = ({ target }) => {
     switch (target.name) {
@@ -36,6 +49,26 @@ function FilterNumbers() {
     }]));
   };
 
+  const resetAllFilters = () => {
+    setFilterByNumericValues([]);
+    setFilteredPlanets(planets);
+  };
+
+  const removeFilter = (filterColumn) => {
+    const newFilters = filterByNumericValues
+      .filter((item) => item.column !== filterColumn);
+    setFilterByNumericValues(newFilters);
+  };
+
+  useEffect(() => {
+    const usedFilters = [];
+    filterByNumericValues.forEach((one) => usedFilters.push(one.column));
+    const notUsedFilters = array.filter((item) => !usedFilters.includes(item));
+    setSelectInput(notUsedFilters);
+    setColumnInput(notUsedFilters[0]);
+    setValueInput(0);
+  }, [filterByNumericValues]);
+
   return (
     <div>
       <label htmlFor="column-filter">
@@ -47,11 +80,13 @@ function FilterNumbers() {
           value={ columnInput }
           onChange={ handleInput }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+
+          {
+            selectInput.map((item, index) => (
+              <option value={ item } key={ index }>{item}</option>
+            ))
+          }
+
         </select>
       </label>
 
@@ -87,6 +122,39 @@ function FilterNumbers() {
         onClick={ onClickFilterButton }
       >
         Filtrar
+      </button>
+
+      <br />
+
+      {
+        filterByNumericValues && (
+          filterByNumericValues.map((item, index) => {
+            const { column, comparison, value } = item;
+            return (
+              <div
+                key={ index }
+                data-testid="filter"
+              >
+                <span>{ `${column} ${comparison} ${value} ` }</span>
+                <button
+                  type="button"
+                  onClick={ () => removeFilter(column) }
+                  data-testid="filter"
+                >
+                  X
+                </button>
+              </div>
+            );
+          })
+        )
+      }
+
+      <button
+        type="button"
+        data-testid="button-remove-filters"
+        onClick={ resetAllFilters }
+      >
+        Reset Filters
       </button>
     </div>
   );

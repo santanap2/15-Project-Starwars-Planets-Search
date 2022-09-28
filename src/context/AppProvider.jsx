@@ -25,6 +25,7 @@ function AppProvider({ children }) {
       const test = filteredPlanets.filter((item) => {
         switch (comparison) {
         case 'maior que':
+          console.log(item[column]);
           return Number(item[column]) > Number(value);
         case 'menor que':
           return Number(item[column]) < Number(value);
@@ -36,6 +37,7 @@ function AppProvider({ children }) {
       });
       setFilteredPlanets(test);
     }
+    console.log('atualizou');
   }, [filterByNumericValues]);
 
   const globalState = {
@@ -50,6 +52,7 @@ function AppProvider({ children }) {
     setComparisonInput,
     setFilterByName,
     setFilterByNumericValues,
+    setFilteredPlanets,
     setPlanets,
     setValueInput,
   };
