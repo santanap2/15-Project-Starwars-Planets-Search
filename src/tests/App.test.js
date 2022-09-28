@@ -38,23 +38,38 @@ describe('Testa a aplicação Starwars Planet Search', () => {
   })
 
   it('Testa se os filtros funcionam corretamente', async () => {
-    render(<App />);    
-    await waitFor(() => {
-      const columnInput = screen.getByTestId('column-filter');
-      userEvent.selectOptions(columnInput, 'rotation_period');
+    render(<App />);
 
-      const comparisonInput = screen.getByTestId('comparison-filter');
-      userEvent.selectOptions(comparisonInput, 'menor que');
+    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
 
-      const valueInput = screen.getByTestId('value-filter');
-      userEvent.clear(valueInput);
-      userEvent.type(valueInput, '20');
+    const columnInput = screen.getByTestId('column-filter');
+    const comparisonInput = screen.getByTestId('comparison-filter');
+    const valueInput = screen.getByTestId('value-filter');
+    const button = screen.getByTestId('button-filter');
 
-      const button = screen.getByTestId('button-filter');
-      userEvent.click(button);      
+    userEvent.selectOptions(columnInput, 'rotation_period');
+    userEvent.selectOptions(comparisonInput, 'menor que');
+    userEvent.type(valueInput, '20');
+    userEvent.click(button);
 
-      let columns = screen.queryAllByRole('row');
-      expect(columns).toHaveLength(3);
-    })
+    const planetRows = screen.queryAllByRole('row');
+    expect(planetRows).toHaveLength(3);
+
+    userEvent.selectOptions(columnInput, 'orbital_period');
+    userEvent.selectOptions(comparisonInput, 'maior que');
+    userEvent.type(valueInput, '1000');
+    userEvent.click(button);
+
+    const secondPlanetRows = screen.queryAllByRole('row');
+    expect(secondPlanetRows).toHaveLength(2);
+
+    userEvent.selectOptions(columnInput, 'surface_water');
+    userEvent.selectOptions(comparisonInput, 'igual a');
+    userEvent.type(valueInput, '0');
+    userEvent.click(button);
+
+    const thirdPlanetRows = screen.queryAllByRole('row');
+    expect(thirdPlanetRows).toHaveLength(2);
+
   });
 });
